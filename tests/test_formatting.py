@@ -590,6 +590,31 @@ def test_help_formatter_write_usage(
     assert f.getvalue() == expected
 
 
+def test_help_formatter_write_usage_does_not_break_on_hyphens():
+    options = [
+        "--enable-verbose-logging",
+        "--output-file-path",
+        "--max-retry-count",
+        "--disable-cache-mode",
+        "--config-file-location",
+        "--user-auth-token",
+        "--auto-update-interval",
+        "--force-overwrite-existing",
+        "--network-timeout-seconds",
+        "--debug-trace-enabled",
+    ]
+    f = click.HelpFormatter(width=65)
+    f.write_usage("program", " ".join(options))
+
+    assert f.getvalue() == (
+        "Usage: program --enable-verbose-logging --output-file-path\n"
+        "               --max-retry-count --disable-cache-mode\n"
+        "               --config-file-location --user-auth-token\n"
+        "               --auto-update-interval --force-overwrite-existing\n"
+        "               --network-timeout-seconds --debug-trace-enabled\n"
+    )
+
+
 def test_help_formatter_write_usage_without_args_styled_prefix():
     """A downstream-styled prefix is preserved when ``args`` is empty:
     the ANSI escape sequences survive, only the trailing separator is
